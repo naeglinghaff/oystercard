@@ -16,7 +16,7 @@ ruby feature_test.rb
 ```
 
 
-## User Test
+## User Story
 
 ```
 In order to use public transport
@@ -43,7 +43,7 @@ As a customer
 I want to add money to my card
 ```
 
-Feature Test
+Feature test
 
 ```
 card.top_up(100.00)
