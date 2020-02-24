@@ -5,7 +5,9 @@ describe Oystercard do
     @card = Oystercard.new
   end
 
-  it 'has money' do
-    expect(@card.view_balance).to be (@card.balance)
+describe '#view_balance' do
+  it 'card has balance' do
+    expect(@card.balance).to eq (0.00)
+  end
   end
 end
