@@ -1,13 +1,12 @@
 require './lib/oystercard'
 
 card = Oystercard.new
-card.top_up(4)
-card.deduct(2)
-
+card.top_up(1)
+# balance will be one
 card.touch_in
+# balance will be 0
 card.touch_out
 card.in_journey?
 
-card.deduct(2)
 card.touch_in
-# This should raise an error since balance = 0
+#will throw error cos we poor

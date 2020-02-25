@@ -28,13 +28,6 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it {is_expected.to respond_to(:deduct).with(1).argument }
-    it  'changes the balance variable' do
-      expect { @card.deduct(5.00) }.to change(@card, :balance).by(-5.00)
-    end
-  end
-
   describe '#touch_in' do
 
     before(:each) do
@@ -56,6 +49,17 @@ describe Oystercard do
     it 'returns false when journey is ended' do
       expect(@card.touch_out).to eq false
     end
+
+    it 'takes away the minimum fare' do
+      expect { @card.touch_out }.to change(@card, :balance).by(-Oystercard::MINIMUM_BALANCE)
+    end
+
+  describe '#deduct' do
+      # it {is_expected.to respond_to(:deduct).with(1).argument }
+      it  'changes the balance variable' do
+        expect { @card.send(:deduct,5.00) }.to change(@card, :balance).by(-5.00)
+      end
+  end
   end
 
   describe '#in_journey?' do

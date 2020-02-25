@@ -89,7 +89,7 @@ card.touch_out
 card.in_journey?
 ```
 
-Updated unit tests feature tests all pass. In_journey toggles between true and false when touch_in and touch_out are called.
+Updated unit tests feature tests all pass. In_journey toggles between true and false when #touch_in and #touch_out are called.
 
 ## User Story
 ```
@@ -103,4 +103,39 @@ Feature tests
 ```
 card.touch_in => Error raised if balance isn't sufficient
 ```
-Added a MINIMUM_BALANCE and updated touch_in to raise an error when balance is lower than the MINIMUM_BALANCE
+Added a MINIMUM_BALANCE and updated #touch_in to raise an error when balance is lower than the MINIMUM_BALANCE
+
+
+## User Story
+
+```
+In order to pay for my journey
+As a customer
+When my journey is complete, I need the correct amount deducted from my card
+```
+
+Feature test
+
+```
+card = Oystercard.new
+card.top_up(1)
+# balance will be one
+card.touch_in
+# balance will be 0
+card.touch_out
+card.in_journey?
+
+card.touch_in
+#will throw error because there is no money
+```
+
+Added unit tests for #deduct and moved it into the #touch_out testing suite.
+
+Test resulted in the expected error:
+
+```
+Makerss-MacBook-Air:oyster student$ ruby feature_test.rb
+Traceback (most recent call last):
+	1: from feature_test.rb:11:in `<main>'
+/Users/student/Documents/projects/week_2/oyster/lib/oystercard.rb:19:in `touch_in': Insufficient funds. Top up your card :-) (RuntimeError)
+```
