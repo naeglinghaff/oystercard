@@ -1,4 +1,4 @@
-require "oystercard"
+require "oystercard
 
 describe Oystercard do
 
@@ -7,10 +7,8 @@ describe Oystercard do
   end
 
   describe "#top_up" do
-
     it "adds #top_up value to balance" do
       expect { subject.top_up 10 }.to change{ subject.balance }.by 10
-
       # subject.top_up(10)
       # expect(subject.balance).to eq 10
     end
@@ -18,10 +16,10 @@ describe Oystercard do
     it "raises an error when #top_up value exceeds limit" do
       expect{ subject.top_up(95) }.to raise_error("Top up limit of #{Oystercard::LIMIT} exceeded")
     end
+
   end
 
   describe "#deduct" do
-
     it "#deducts value from balance" do
       subject.top_up(10)
       expect { subject.deduct(5) }.to change{ subject.balance }.by -5
@@ -35,9 +33,17 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
-
-    it "checks if card has been used to #touch_in" do
-      expect(subject.touch_in).to eq true
+    it "#in_journey? returns true if #touch_in" do
+      subject.touch_in
+      expect(subject.in_journey?).to be true
     end
   end
+
+  describe "#touch_out" do
+    it "#in_journey? returns false after #touch_out" do
+      subject.touch_out
+      expect(subject.in_journey?).to be false
+    end
+  end
+
 end
