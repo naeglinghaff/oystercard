@@ -70,3 +70,23 @@ card.top_up(95.00)
 This shouldn't throw an error at first so we need to write a unit test that will throw one for us.
 
 The exception needs to go into the code to raise the error when the limit is exceeded.
+
+## User Story
+
+```
+In order to get through the barriers.
+As a customer
+I need to touch in and out.
+```
+
+Feature test
+
+```
+card.touch_in
+
+card.touch_out
+
+card.in_journey?
+```
+
+Potentially will move card.in_journey? to a different user story..
