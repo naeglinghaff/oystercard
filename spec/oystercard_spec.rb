@@ -8,6 +8,9 @@ describe Oystercard do
   it 'card has balance' do
     expect(@card.balance).to eq (0.00)
   end
+  it 'card has minimum balance of 1' do
+    expect(Oystercard::MINIMUM_BALANCE).to eq (1.00)
+  end
 
 
   describe '#top_up' do
@@ -33,9 +36,18 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
+
+    before(:each) do
+      @card.instance_variable_set(:@balance, 5.0)
+    end
+
     it {is_expected.to respond_to(:touch_in) }
     it 'returns true when user is on a journey' do
       expect(@card.touch_in).to eq true
+    end
+    it 'raises an error when balance is less 1' do
+      @card.instance_variable_set(:@balance, 0)
+      expect { @card.touch_in }.to raise_error "Insufficient funds. Top up your card :-)"
     end
   end
 
@@ -47,6 +59,10 @@ describe Oystercard do
   end
 
   describe '#in_journey?' do
+    before(:each) do
+      @card.instance_variable_set(:@balance, 5.00)
+    end
+
     it {is_expected.to respond_to(:in_journey?) }
     it 'is not initially on a journey' do
       expect(subject).not_to be_in_journey

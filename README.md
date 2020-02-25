@@ -90,3 +90,16 @@ card.in_journey?
 ```
 
 Updated unit tests feature tests all pass. In_journey toggles between true and false when touch_in and touch_out are called.
+
+## User Story
+```
+In order to pay for my journey
+As a customer
+I need to have the minimum amount (£1) for a single journey.
+```
+
+Feature tests
+
+```
+card.touch_in => Error raised if balance isn't sufficient
+```
