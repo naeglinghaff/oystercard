@@ -23,7 +23,14 @@ describe Oystercard do
   describe "#deduct" do
 
     it "#deducts value from balance" do
-      expect { subject.deduct 5 }.to change{ subject.balance }.by -5
+      subject.top_up(10)
+      expect { subject.deduct(5) }.to change{ subject.balance }.by -5
+    end
+
+    it "raises an error when #deduct and balance is too low" do
+      # @balance = 10
+      subject.top_up(10)
+      expect { subject.deduct(15) }.to raise_error("Not enough money in your card")
     end
   end
 
