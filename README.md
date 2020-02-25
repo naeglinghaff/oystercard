@@ -89,4 +89,4 @@ card.touch_out
 card.in_journey?
 ```
 
-Potentially will move card.in_journey? to a different user story..
+Updated unit tests feature tests all pass. In_journey toggles between true and false when touch_in and touch_out are called.

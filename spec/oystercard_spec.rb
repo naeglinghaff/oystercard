@@ -32,4 +32,33 @@ describe Oystercard do
     end
   end
 
+  describe '#touch_in' do
+    it {is_expected.to respond_to(:touch_in) }
+    it 'returns true when user is on a journey' do
+      expect(@card.touch_in).to eq true
+    end
+  end
+
+  describe '#touch_out' do
+    it {is_expected.to respond_to(:touch_out) }
+    it 'returns false when journey is ended' do
+      expect(@card.touch_out).to eq false
+    end
+  end
+
+  describe '#in_journey?' do
+    it {is_expected.to respond_to(:in_journey?) }
+    it 'is not initially on a journey' do
+      expect(subject).not_to be_in_journey
+    end
+    it 'returns true when user is touched in' do
+      @card.touch_in
+      expect(@card.in_journey?).to eq true
+    end
+    it 'returns false when user is touched out' do
+      @card.touch_in
+      @card.touch_out
+      expect(@card.in_journey?).to eq false
+    end
+  end
 end

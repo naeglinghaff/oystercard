@@ -6,6 +6,7 @@ class Oystercard
   def initialize
     @balance = 0.00
     @limit_error = "The limit is #{MAXIMUM_LIMIT}"
+    @in_journey = false
   end
 
   def top_up(money)
@@ -17,4 +18,15 @@ class Oystercard
     @balance -= money
   end
 
+   def touch_in
+     @in_journey = true
+   end
+
+   def touch_out
+     @in_journey = false
+   end
+
+  def in_journey?
+    @in_journey
+   end
 end
