@@ -103,3 +103,4 @@ Feature tests
 ```
 card.touch_in => Error raised if balance isn't sufficient
 ```
+Added a MINIMUM_BALANCE and updated touch_in to raise an error when balance is lower than the MINIMUM_BALANCE
