@@ -39,12 +39,12 @@ describe Oystercard do
   describe "#touch_in" do
     it "#in_journey? returns true if #touch_in" do
       subject.instance_variable_set(:@balance, 10) # Sets an instance variable to chosen value
-      subject.touch_in
+      subject.touch_in("station_name")
       expect(subject.in_journey?).to be true
     end
 
     it "raises an error if #touch_in and balance is below MIN_FARE" do
-      expect{subject.touch_in}.to raise_error("Not enough money in your card")
+      expect{ subject.touch_in("station_name") }.to raise_error("Not enough money in your card")
     end
   end
 
@@ -56,15 +56,32 @@ describe Oystercard do
 
     it "#in_journey? returns false after #touch_out" do
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in
+      subject.touch_in("station_name")
       subject.touch_out
       expect(subject.in_journey?).to be false
     end
 
     it 'deducts minimum fare when you #touch_out' do
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in
+      subject.touch_in("station_name")
       expect { subject.touch_out }.to change { subject.balance }.by -Oystercard::MIN_FARE
+    end
+  end
+
+  describe "journey_history" do
+    it "saves the entry_station at #touch_in" do
+      # card = double()
+      # allow(card).to receive(:touch_in).with("station_name")
+      subject.instance_variable_set(:@balance, 10)
+      subject.touch_in("station_name")
+      expect(subject.entry_station).to eq "station_name"
+    end
+
+    it "resets the entry_station to nil at #touch_out" do
+      subject.instance_variable_set(:@balance, 10)
+      subject.touch_in("station_name")
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
     end
   end
 end
