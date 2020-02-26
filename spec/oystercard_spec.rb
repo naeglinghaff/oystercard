@@ -18,7 +18,7 @@ describe Oystercard do
     end
 
     it "raises an error when #top_up value exceeds limit" do
-      expect{ subject.top_up(95) }.to raise_error("Top up limit of #{Oystercard::LIMIT} exceeded")
+      expect{ subject.top_up(95) }.to raise_error("Top up limit of #{Oystercard::MAX_BALANCE} exceeded")
     end
 
   end
@@ -38,8 +38,13 @@ describe Oystercard do
 
   describe "#touch_in" do
     it "#in_journey? returns true if #touch_in" do
+      subject.instance_variable_set(:@balance, 10) # Sets an instance variable to chosen value
       subject.touch_in
       expect(subject.in_journey?).to be true
+    end
+
+    it "raises an error if #touch_in and balance is below £1" do
+      expect{subject.touch_in}.to raise_error("Not enough money in your card")
     end
   end
 
@@ -52,6 +57,7 @@ describe Oystercard do
     end
 
     it "#in_journey? returns false after #touch_out" do
+      subject.instance_variable_set(:@balance, 10)
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey?).to be false
