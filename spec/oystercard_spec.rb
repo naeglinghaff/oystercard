@@ -10,6 +10,10 @@ describe Oystercard do
     expect(subject.in_journey?).to eq false
   end
 
+  it 'initializes with an empty journey_history' do
+    expect(subject.journey_history).to eq []
+  end
+
   describe "#top_up" do
     it "adds #top_up value to balance" do
       expect { subject.top_up 10 }.to change{ subject.balance }.by 10
@@ -39,32 +43,32 @@ describe Oystercard do
   describe "#touch_in" do
     it "#in_journey? returns true if #touch_in" do
       subject.instance_variable_set(:@balance, 10) # Sets an instance variable to chosen value
-      subject.touch_in("station_name")
+      subject.touch_in("entry_station")
       expect(subject.in_journey?).to be true
     end
 
     it "raises an error if #touch_in and balance is below MIN_FARE" do
-      expect{ subject.touch_in("station_name") }.to raise_error("Not enough money in your card")
+      expect{ subject.touch_in("entry_station") }.to raise_error("Not enough money in your card")
     end
   end
 
   describe "#touch_out" do
 
     it "#touch_out raises error if #in_journey? is false" do
-      expect{subject.touch_out}.to raise_error("Currently not travelling")
+      expect{subject.touch_out("exit_station")}.to raise_error("Currently not travelling")
     end
 
     it "#in_journey? returns false after #touch_out" do
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in("station_name")
-      subject.touch_out
+      subject.touch_in("entry_station")
+      subject.touch_out("exit_station")
       expect(subject.in_journey?).to be false
     end
 
     it 'deducts minimum fare when you #touch_out' do
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in("station_name")
-      expect { subject.touch_out }.to change { subject.balance }.by -Oystercard::MIN_FARE
+      subject.touch_in("entry_station")
+      expect { subject.touch_out("exit_station") }.to change { subject.balance }.by -Oystercard::MIN_FARE
     end
   end
 
@@ -73,15 +77,34 @@ describe Oystercard do
       # card = double()
       # allow(card).to receive(:touch_in).with("station_name")
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in("station_name")
-      expect(subject.entry_station).to eq "station_name"
+      subject.touch_in("entry_station")
+      expect(subject.entry_station).to eq "entry_station"
     end
 
     it "resets the entry_station to nil at #touch_out" do
       subject.instance_variable_set(:@balance, 10)
-      subject.touch_in("station_name")
-      subject.touch_out
+      subject.touch_in("entry_station")
+      subject.touch_out("exit_station")
       expect(subject.entry_station).to eq nil
     end
+
+    it 'save an exit station at #touch_out' do
+      subject.instance_variable_set(:@balance, 10)
+      subject.touch_in("entry_station")
+      subject.touch_out("exit_station")
+      expect(subject.exit_station).to eq("exit_station")
+    end
+
+    context 'saves exit and entry stations' do
+      it 'stores entry and exit in an instance variable' do
+        subject.instance_variable_set(:@balance, 10)
+        subject.touch_in("entry_station")
+        subject.touch_out("exit_station")
+        expect(subject.journey_history).to eq([{:entry_station => "entry_station",:exit_station => "exit_station"}])
+      end
+    end
   end
+
+
+
 end
