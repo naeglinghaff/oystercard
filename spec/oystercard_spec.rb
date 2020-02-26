@@ -26,13 +26,13 @@ describe Oystercard do
   describe "#deduct" do
     it "#deducts value from balance" do
       subject.top_up(10)
-      expect { subject.deduct(5) }.to change{ subject.balance }.by -5
+      expect { subject.send(:deduct,5) }.to change{ subject.balance }.by -5 # calling the private method
     end
 
     it "raises an error when #deduct and balance is too low" do
       # @balance = 10
       subject.top_up(10)
-      expect { subject.deduct(15) }.to raise_error("Not enough money in your card")
+      expect { subject.send(:deduct,15) }.to raise_error("Not enough money in your card")
     end
   end
 
@@ -43,17 +43,15 @@ describe Oystercard do
       expect(subject.in_journey?).to be true
     end
 
-    it "raises an error if #touch_in and balance is below £1" do
+    it "raises an error if #touch_in and balance is below MIN_FARE" do
       expect{subject.touch_in}.to raise_error("Not enough money in your card")
     end
   end
 
   describe "#touch_out" do
+
     it "#touch_out raises error if #in_journey? is false" do
       expect{subject.touch_out}.to raise_error("Currently not travelling")
-    end
-
-    it "#touch_out works if we have #touch_in before" do
     end
 
     it "#in_journey? returns false after #touch_out" do
@@ -61,6 +59,12 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey?).to be false
+    end
+
+    it 'deducts minimum fare when you #touch_out' do
+      subject.instance_variable_set(:@balance, 10)
+      subject.touch_in
+      expect { subject.touch_out }.to change { subject.balance }.by -Oystercard::MIN_FARE
     end
   end
 end
