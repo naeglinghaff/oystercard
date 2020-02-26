@@ -1,9 +1,13 @@
-require "oystercard
+require 'oystercard'
 
 describe Oystercard do
 
   it "initializes with default balance of 0" do
     expect(subject.balance).to eq 0
+  end
+
+  it "initializes with #in_journey? false" do
+    expect(subject.in_journey?).to eq false
   end
 
   describe "#top_up" do
@@ -40,10 +44,17 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
+    it "#touch_out raises error if #in_journey? is false" do
+      expect{subject.touch_out}.to raise_error("Currently not travelling")
+    end
+
+    it "#touch_out works if we have #touch_in before" do
+    end
+
     it "#in_journey? returns false after #touch_out" do
+      subject.touch_in
       subject.touch_out
       expect(subject.in_journey?).to be false
     end
   end
-
 end

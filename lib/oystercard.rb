@@ -23,7 +23,8 @@ class Oystercard
   end
 
   def touch_out
-    @travelling 
+    fail "Currently not travelling" if @travelling == false
+    @travelling = false
   end
 
   def in_journey?
